@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Activities</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="container col-md-4 offset-4">
+    <div class="row">
+        <div class="col-md-3 offset-1">
+            <a class="btn btn-primary" href="#" role="button" th:href="@{'/activities/LEISURE'}">Leisure</a>
+        </div>
+
+        <div class="col-md-3">
+            <a type="button" class="btn btn-secondary" th:href="@{'/activities/JOB'}">Job/ Work</a>
+        </div>
+
+        <div class="col-md-3">
+            <a type="button" class="btn btn-success" th:href="@{'/activities/UPGROWTH'}">Upgrowth</a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+    <div class="col-md-4">
+        <a class="btn btn-link" href="#" role="button" th:href="@{'/operator/new'}">Add new activity</a>
+    </div>
+    </div>
+
+    <div class="row">
+    <table class="table table-light">
+        <tr th:each="activity : ${activities}">
+            <td>1</td>
+            <td th:text="${activity.description}">Logo</td>
+            <td th:text="${activity.description}">Description</td>
+            <td><a href="#">Edit</a></td>
+        </tr>
+    </table>
+</div>
+</div>
+</div>
+<script>
+    $('.table tbody tr').each(function (i) {
+        var number = i + 1;
+        $(this).find('td:first').text(number + ".");
+    });
+</script>
+</body>
+</html>

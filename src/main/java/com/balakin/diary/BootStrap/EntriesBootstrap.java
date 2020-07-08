@@ -49,10 +49,20 @@ public class EntriesBootstrap implements ApplicationListener<ContextRefreshedEve
         entry2.setDuration(20);
         entry2.setActivity(activity2);
 
+        Entry entry3 = new Entry();
+        Activity activity3 = new Activity();
+        activity3.setDescription("TdgdhV");
+        activity3.setType(Type.LEISURE);
+        entry3.setDate(Date.valueOf(LocalDate.now()));
+        entry3.setDuration(20);
+        entry3.setActivity(activity3);
+
         activityRepository.save(activity1);
         activityRepository.save(activity2);
+        activityRepository.save(activity3);
         entries.add(entry1);
         entries.add(entry2);
+        entries.add(entry3);
 
 
         return entries;
