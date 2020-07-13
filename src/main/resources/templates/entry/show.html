@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Entries</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="container col-md-4 offset-4">
+        <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/entries/search'}">
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="card">
+                        <div class="form-group">
+                            <h5 class="card-title">Start date</h5>
+                            <input name="startdate" type="date"  required="required" th:value="${start}"
+                                   pattern="{1,20}" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 offset-1">
+                    <div class="card">
+                        <div class="form-group">
+                            <h5 class="card-title">End date</h5>
+                            <input name="enddate" type="date" required="required" th:value="${end}"
+                                   pattern="{1,20}" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                </div>
+
+        </form>
+
+        <br>
+        <div class="row col-md-8 offset-2" th:if="${#lists.isEmpty(entries)}">
+            <div class="table-responsive">
+                <p th:text="${'No data found for chosen period'}"></p>
+            </div>
+        </div>
+
+        <div class="table-responsive" th:if="${not #lists.isEmpty(entries)}">
+            <br>
+            <table class="table table-hover">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>№</th>
+                    <th>Logo</th>
+                    <th>description</th>
+                    <th>Duration</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="entry : ${entries}">
+                    <td>1.</td>
+                    <td th:text="${entry.getActivity().getLogo()}">Tasty Goodnees 3</td>
+                    <td th:text="${entry.getActivity().getDescription()}">Tasty Goodnees</td>
+                    <td th:text="${entry.getDuration()}">Tasty Goodnees 3</td>
+                    <td th:text="${entry.getDate()}">Tasty Goodnees 3</td>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $('.table tbody tr').each(function (i) {
+        var number = i + 1;
+        $(this).find('td:first').text(number + ".");
+    });
+</script>
+</body>
+</html>
