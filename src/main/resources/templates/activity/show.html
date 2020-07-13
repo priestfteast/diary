@@ -33,7 +33,7 @@
     <br>
     <div class="row">
     <div class="col-md-4">
-        <a class="btn btn-link" href="#" role="button" th:href="@{'/operator/new'}">Add new activity</a>
+        <a class="btn btn-link" href="#" role="button" th:href="@{'/activities/new'}">Add new activity</a>
     </div>
     </div>
 
@@ -41,9 +41,12 @@
     <table class="table table-light">
         <tr th:each="activity : ${activities}">
             <td>1</td>
-            <td th:text="${activity.description}">Logo</td>
-            <td th:text="${activity.description}">Description</td>
-            <td><a href="#">Edit</a></td>
+            <td> <img th:src="@{'/activities/' + ${activity.id} + '/getimage'}"
+                      width="80" height="80"></td>
+            <td th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(' '+activity.description),' ','&lt;br /&gt;'))}">
+                Description</td>
+            <td><a href="#" th:href="@{'/activities/' + ${activity.id}+'/edit'}"
+                   th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(' Edit'),' ','&lt;br /&gt;'))}">Edit</a></td>
         </tr>
     </table>
 </div>

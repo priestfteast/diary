@@ -5,11 +5,11 @@ import com.balakin.diary.repositories.EntryRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EntryService {
+public class EntryServiceImpl {
     private final EntryRepository entryRepository;
     private final ActivityRepository activityRepository;
 
-    public EntryService(EntryRepository entryRepository, ActivityRepository activityRepository) {
+    public EntryServiceImpl(EntryRepository entryRepository, ActivityRepository activityRepository) {
         this.entryRepository = entryRepository;
         this.activityRepository = activityRepository;
     }

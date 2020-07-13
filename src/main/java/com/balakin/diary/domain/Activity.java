@@ -17,6 +17,9 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    private Byte[] logo;
+
     private String description;
 
     @Enumerated(EnumType.STRING)

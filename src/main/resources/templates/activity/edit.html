@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit activity</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="container col-md-4 offset-4">
+        <div class="card-body">
+            <h5 class="card-title" style="color: #0275d8">Activity form</h5>
+        <form action="http:\\localhost" enctype="multipart/form-data" method="post"
+              th:action="@{'/activities/' + ${activity.getId()} + '/saveimage'}">
+            <div class="row" th:if="${activity.id ne null}">
+                <div class="col-md-10">
+                    <img src="../../static/images/guacamole400x400WithX.jpg"
+                         th:src="@{'/activities/' + ${activity.id} + '/getimage'}"
+                         width="80" height="80">
+                    <label class="control-label">Logo</label>
+                    <input accept=".jpg, .jpeg, .png" class="file" id="imagefile" name="imagefile" type="file">
+                </div>
+                <br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+        <br>
+        <form th:object="${activity}" th:action="@{'/activities/' + ${activity.getId()} + '/save'}" method="post"
+              class="form-horizontal">
+            <input type="hidden" th:field="*{id}">
+            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                <p th:text="#{operator.error}">Please Correct Errors Below</p>
+            </div>
+            <div class="card">
+                    <div class="row">
+                        <label for="dn" class="col-md-3 control-label">Decription:</label>
+                        <div class="col-md-8 form-group" th:class="${#fields.hasErrors('description')}
+                               ? 'col-md-6 form-group has-error' : 'col-md-6 form-group'">
+                            <input type="text" class="form-control" id="dn" placeholder="Description" th:field="*{description}">
+                            <span class="help-block" th:if="${#fields.hasErrors('description')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('description')}"
+                                                th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Type:</p>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" th:field="*{type}">
+                                <option th:each="type : ${T(com.balakin.diary.domain.Type).values()}"
+                                        th:value="${type.name()}"
+                                        th:text="${type.name()}"
+                                >val
+                                </option>
+                            </select>
+
+                            <select class="form-control" th:remove="all">
+                                <option>SEVEN_AM</option>
+                                <option>EIGHT_AM</option>
+                                <option>NINE_AM</option>
+                            </select>
+
+                        </div>
+                    </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-2">
+                <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </div>
+                </div>
+
+        </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
