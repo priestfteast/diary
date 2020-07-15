@@ -9,4 +9,5 @@ public interface EntryService {
     EntryCommand findById(Long id);
     List<Entry> findByDate(String startDate, String endDate);
     EntryCommand saveEntryCommand (EntryCommand entryCommand);
+    void deleteById(Long idToDelete);
 }

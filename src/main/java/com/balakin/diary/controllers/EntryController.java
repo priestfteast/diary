@@ -74,6 +74,13 @@ public class EntryController {
             return "entry/edit";
         }
 
+    @GetMapping("entries/{id}/delete")
+    public String deleteEntry(@PathVariable String id){
+        LocalDate date = entryService.findById(Long.valueOf(id)).getDate();
+        entryService.deleteById(Long.valueOf(id));
+        return "redirect:/entries/show/"+date.toString()+"/"+date.toString();
+    }
+
         @PostMapping("/entries/{id}/save")
         public String saveOrUpdate(@Valid @ModelAttribute ("entry") EntryCommand entryCommand, BindingResult bindingResult, Model model) {
             if (bindingResult.hasErrors()) {

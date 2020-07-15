@@ -81,4 +81,9 @@ public class ActivityServiceImpl implements ActivityService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void deleteById(Long idToDelete) {
+        activityRepository.deleteById(idToDelete);
+    }
 }

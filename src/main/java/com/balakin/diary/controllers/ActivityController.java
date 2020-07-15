@@ -79,6 +79,14 @@ public class ActivityController {
             return "redirect:/activities/"+id+"/edit";
         }
 
+        @GetMapping("activities/{id}/delete")
+        public String deleteActivity(@PathVariable String id){
+            Type type = activityService.findById(Long.valueOf(id)).getType();
+            activityService.deleteById(Long.valueOf(id));
+
+            return "redirect:/activities/"+type.toString();
+        }
+
     @GetMapping("activities/{id}/getimage")
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
         ActivityCommand activityCommand = activityService.findById(Long.valueOf(id));

@@ -62,4 +62,11 @@ public class EntryServiceImpl implements EntryService {
         EntryCommand savedCommand = entryToEntryCommandConverter.convert(entryRepository.save(detachedEntry));
         return savedCommand;
     }
+
+    @Override
+    public void deleteById(Long idToDelete) {
+        Entry entryToDelete = entryRepository.findById(idToDelete).get();
+        entryToDelete.getActivity().getEntries().remove(entryToDelete);
+        entryRepository.deleteById(idToDelete);
+    }
 }
