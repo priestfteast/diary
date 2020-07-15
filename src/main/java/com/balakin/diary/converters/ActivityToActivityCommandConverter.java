@@ -10,6 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActivityToActivityCommandConverter implements Converter<Activity, ActivityCommand> {
 
+    private final EntryToEntryCommandConverter entryToEntryCommandConverter;
+
+    public ActivityToActivityCommandConverter(EntryToEntryCommandConverter entryToEntryCommandConverter) {
+        this.entryToEntryCommandConverter = entryToEntryCommandConverter;
+    }
+
     @Nullable
     @Synchronized
     @Override
@@ -21,6 +27,11 @@ public class ActivityToActivityCommandConverter implements Converter<Activity, A
         activityCommand.setDescription(activity.getDescription());
         activityCommand.setType(activity.getType());
         activityCommand.setLogo(activity.getLogo());
+        if(activity.getEntries()!=null&&activity.getEntries().size()>0){
+            activity.getEntries().
+                    forEach(entry -> activityCommand.getEntries().add(entryToEntryCommandConverter.convert(entry)));
+        }
+
 
 
         return activityCommand;

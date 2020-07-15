@@ -1,13 +1,16 @@
 package com.balakin.diary.commands;
 
 import com.balakin.diary.domain.Activity;
+import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.PastOrPresent;
-import java.sql.Date;
+import javax.validation.constraints.Positive;
+import java.time.LocalDate;
+
 
 @Data
 @NoArgsConstructor
@@ -15,13 +18,16 @@ public class EntryCommand {
 
     private Long id;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @PastOrPresent
-    private Date date;
+    private LocalDate date;
 
-    @NotEmpty
+    @NotNull
     private Activity activity;
 
-    @NotEmpty
+    @Positive
+    @Digits(integer = 3, fraction = 0)
     private int duration;
+
+
 }

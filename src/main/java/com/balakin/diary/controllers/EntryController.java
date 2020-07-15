@@ -1,27 +1,39 @@
 package com.balakin.diary.controllers;
 
+import com.balakin.diary.commands.ActivityCommand;
+import com.balakin.diary.commands.EntryCommand;
+import com.balakin.diary.domain.Activity;
+import com.balakin.diary.domain.Type;
+import com.balakin.diary.services.ActivityService;
 import com.balakin.diary.services.EntryService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class EntryController {
 
     private final EntryService entryService;
+    private final ActivityService activityService;
 
-    public EntryController(EntryService entryService) {
+    public EntryController(EntryService entryService, ActivityService activityService) {
         this.entryService = entryService;
+        this.activityService = activityService;
     }
 
 
-    @RequestMapping("/entries/show/today")
+    @GetMapping("/entries/show/today")
     public String showEntries(Model model){
         model.addAttribute("entries",entryService.findByDate(LocalDate.now().toString(),LocalDate.now().toString()));
         model.addAttribute("start", LocalDate.now().toString());
@@ -44,5 +56,53 @@ public class EntryController {
         String endDate = formData.getFirst("enddate");
             return "redirect:/entries/show/"+startDate+"/"+endDate;
         }
+
+    @GetMapping("/entries/new")
+    public String newEntry(Model model){
+        model.addAttribute("entry",new EntryCommand());
+        model.addAttribute("activities",activityService.getActivities(Type.LEISURE));
+
+        return "entry/edit";
+    }
+
+        @GetMapping("/entries/{id}/edit/{type}")
+        public String editEntry(@PathVariable String type,@PathVariable String id, Model model){
+            List<Activity> activities = activityService.getActivities(Type.valueOf(type));
+            model.addAttribute("entry",entryService.findById(Long.valueOf(id)) );
+            model.addAttribute("activities",activities);
+
+            return "entry/edit";
+        }
+
+        @PostMapping("/entries/{id}/save")
+        public String saveOrUpdate(@Valid @ModelAttribute ("entry") EntryCommand entryCommand, BindingResult bindingResult, Model model) {
+            if (bindingResult.hasErrors()) {
+                bindingResult.getAllErrors().forEach(objectError -> {
+                });
+                model.addAttribute("activities",activityService.getActivities(entryCommand.getActivity().getType()));
+                return "entry/edit";
+            }
+
+           EntryCommand savedEntryCommand = entryService.saveEntryCommand(entryCommand);
+           return "redirect:/entries/show/"+savedEntryCommand.getDate()+"/"+savedEntryCommand.getDate();
+        }
+
+    @GetMapping("entries/{id}/getimage")
+    public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
+        ActivityCommand activityCommand = activityService.findById(Long.valueOf(id));
+
+        if (activityCommand.getLogo() != null) {
+            byte[] byteArray = new byte[activityCommand.getLogo().length];
+            int i = 0;
+
+            for (Byte wrappedByte : activityCommand.getLogo()){
+                byteArray[i++] = wrappedByte; //auto unboxing
+            }
+
+            response.setContentType("image/jpeg");
+            InputStream is = new ByteArrayInputStream(byteArray);
+            IOUtils.copy(is, response.getOutputStream());
+        }
+    }
 
 }

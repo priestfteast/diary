@@ -50,6 +50,12 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-4">
+                <a class="btn btn-link" href="#" role="button" th:href="@{'/entries/new'}">Add new entry</a>
+            </div>
+        </div>
+
         <div class="table-responsive" th:if="${not #lists.isEmpty(entries)}">
             <br>
             <table class="table table-hover">
@@ -65,11 +71,13 @@
                 <tbody>
                 <tr th:each="entry : ${entries}">
                     <td>1.</td>
-                    <td th:text="${entry.getActivity().getLogo()}">Tasty Goodnees 3</td>
+                    <td> <img th:src="@{'/entries/' + ${entry.getActivity().getId()} + '/getimage'}"
+                             width="40" height="40"></td>
                     <td th:text="${entry.getActivity().getDescription()}">Tasty Goodnees</td>
                     <td th:text="${entry.getDuration()}">Tasty Goodnees 3</td>
                     <td th:text="${entry.getDate()}">Tasty Goodnees 3</td>
-                    </td>
+                    <td><a href="#" th:href="@{'/entries/' + ${entry.id}+'/edit/'+${entry.getActivity().getType()}}">Edit</a></td>
+
                 </tr>
                 </tbody>
             </table>

@@ -37,7 +37,8 @@ public class EntriesBootstrap implements ApplicationListener<ContextRefreshedEve
         Activity activity1 = new Activity();
         activity1.setDescription("VK");
         activity1.setType(Type.LEISURE);
-        entry1.setDate(Date.valueOf(LocalDate.now()));
+        activity1.setEntries(new ArrayList<>());
+        entry1.setDate(LocalDate.now());
         entry1.setDuration(20);
         entry1.setActivity(activity1);
 
@@ -45,21 +46,27 @@ public class EntriesBootstrap implements ApplicationListener<ContextRefreshedEve
         Activity activity2 = new Activity();
         activity2.setDescription("English");
         activity2.setType(Type.UPGROWTH);
-        entry2.setDate(Date.valueOf(LocalDate.now()));
+        activity2.setEntries(new ArrayList<>());
+        entry2.setDate(LocalDate.now());
         entry2.setDuration(20);
         entry2.setActivity(activity2);
 
         Entry entry3 = new Entry();
         Activity activity3 = new Activity();
-        activity3.setDescription("TdgdhV");
+        activity3.setDescription("TdgdfdgfdgfdghV");
         activity3.setType(Type.LEISURE);
-        entry3.setDate(Date.valueOf(LocalDate.now()));
+        activity3.setEntries(new ArrayList<>());
+        entry3.setDate(LocalDate.now());
         entry3.setDuration(20);
         entry3.setActivity(activity3);
 
         activityRepository.save(activity1);
         activityRepository.save(activity2);
         activityRepository.save(activity3);
+        activity1.getEntries().add(entry1);
+
+
+
         entries.add(entry1);
         entries.add(entry2);
         entries.add(entry3);
@@ -72,6 +79,8 @@ public class EntriesBootstrap implements ApplicationListener<ContextRefreshedEve
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         entryRepository.saveAll(getEntries());
+
+
     }
 
 

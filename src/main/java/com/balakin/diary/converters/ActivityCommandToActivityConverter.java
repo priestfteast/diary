@@ -7,10 +7,14 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 @Component
 public class ActivityCommandToActivityConverter implements Converter<ActivityCommand, Activity> {
+
+    private final EntryCommandToEntryConverter entryCommandToEntryConverter;
+
+    public ActivityCommandToActivityConverter(EntryCommandToEntryConverter entryCommandToEntryConverter) {
+        this.entryCommandToEntryConverter = entryCommandToEntryConverter;
+    }
 
     @Nullable
     @Synchronized
@@ -24,6 +28,10 @@ public class ActivityCommandToActivityConverter implements Converter<ActivityCom
     activity.setDescription(activityCommand.getDescription());
     activity.setType(activityCommand.getType());
     activity.setLogo(activityCommand.getLogo());
+        if(activityCommand.getEntries()!=null&&activityCommand.getEntries().size()>0){
+            activityCommand.getEntries().
+                    forEach(entry -> activity.getEntries().add(entryCommandToEntryConverter.convert(entry)));
+        }
 
 
     return activity;

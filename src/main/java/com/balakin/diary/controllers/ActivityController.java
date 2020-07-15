@@ -39,6 +39,7 @@ public class ActivityController {
             type1=Type.valueOf(type);
         List<Activity> activities = activityService.getActivities(type1);
         model.addAttribute("activities",activities);
+        activities.forEach(activity -> activity.getEntries().forEach(entry -> System.out.println(entry)));
         return "activity/show";
     }
 

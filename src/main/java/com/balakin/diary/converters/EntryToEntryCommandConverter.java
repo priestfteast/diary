@@ -13,6 +13,7 @@ public class EntryToEntryCommandConverter implements Converter<Entry, EntryComma
     @Synchronized
     @Override
     public EntryCommand convert(Entry entry) {
+
         if(entry==null)
             return null;
 

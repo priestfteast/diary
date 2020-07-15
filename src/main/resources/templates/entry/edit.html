@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit entry</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="container col-md-4 offset-4">
+        <form th:object="${entry}" th:action="@{'/entries/' + ${entry.getId()} + '/save'}" method="post"
+              class="form-horizontal">
+            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                <p th:text="#{operator.error}">Please Correct Errors Below</p>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #0275d8">Entry form</h5>
+                    <div class="row">
+                        <div class="col-md-4 ">
+                            <a class="btn btn-primary" href="#" role="button" th:href="@{'/entries/' + ${entry.id}+'/edit/LEISURE'}">Leisure</a>
+                        </div>
+
+                        <div class="col-md-4">
+                            <a type="button" class="btn btn-secondary" th:href="@{'/entries/' + ${entry.id}+'/edit/JOB'}">Job/ Work</a>
+                        </div>
+
+                        <div class="col-md-4">
+                            <a type="button" class="btn btn-success" th:href="@{'/entries/' + ${entry.id}+'/edit/UPGROWTH'}">Upgrowth</a>
+                        </div>
+                    </div>
+                    <br>
+
+                        <input type="hidden" th:field="*{id}">
+                        <div class="row">
+                        <div class="col-md-5">
+                            <select name="activity">
+                                <option class="dropdown-item" th:each="activity : ${activities}"
+                                        th:text="${activity.getDescription()}"
+                                        th:value="${activity.getId()}"
+                                        th:selected="${entry.getId()ne null and entry.getActivity().getDescription().equals(activity.getDescription())}">Activity
+                                </option>
+                            </select>
+                        </div>
+                        </div>
+                                <br>
+                                <div class="row">
+                        <div class="col-md-5">
+                            <input type="date" class="form-control" id="date" placeholder="Date"
+                                   th:field="*{date}"
+                                   th:errorclass="has-error">
+                        </div>
+                            <div class="col-md-7">
+                                    <span class="help-block" th:if="${#fields.hasErrors('date')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('date')}"
+                                                th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                            </div>
+                        </div>
+                    <br>
+                                <div class="row">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="duration" placeholder="Time"
+                                   th:field="*{duration}"
+                                   th:errorclass="has-error">
+                        </div>
+                                    <div class="col-md-7">
+                                    <span class="help-block" th:if="${#fields.hasErrors('duration')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('duration')}"
+                                                th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                                    </div>
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+            </form>
+
+
+        </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
