@@ -57,16 +57,22 @@ public class EntryController {
             return "redirect:/entries/show/"+startDate+"/"+endDate;
         }
 
-    @GetMapping("/entries/new")
-    public String newEntry(Model model){
-        model.addAttribute("entry",new EntryCommand());
-        model.addAttribute("activities",activityService.getActivities(Type.LEISURE));
+    @GetMapping("/entries/new/{type}")
+    public String newEntry(@PathVariable String type, Model model){
+        EntryCommand entryCommand = new EntryCommand();
+        entryCommand.setDate(LocalDate.now());
+        model.addAttribute("entry",entryCommand);
+        model.addAttribute("activities",activityService.getActivities(Type.valueOf(type)));
 
         return "entry/edit";
     }
 
         @GetMapping("/entries/{id}/edit/{type}")
         public String editEntry(@PathVariable String type,@PathVariable String id, Model model){
+
+        if(id.equals("null"))
+            return "redirect:/entries/new/"+type;
+
             List<Activity> activities = activityService.getActivities(Type.valueOf(type));
             model.addAttribute("entry",entryService.findById(Long.valueOf(id)) );
             model.addAttribute("activities",activities);
