@@ -13,4 +13,5 @@ public interface ActivityService {
     ActivityCommand saveActivityCommand(ActivityCommand activityCommand);
     void saveLogoFile(Long id, MultipartFile file);
     void deleteById(Long idToDelete);
+    Activity findByDescription (String description);
 }

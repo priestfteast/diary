@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ActivityRepository extends CrudRepository<Activity, Long> {
     List<Activity> findAllByType(Type type);
+    Activity findByDescription(String description);
 }

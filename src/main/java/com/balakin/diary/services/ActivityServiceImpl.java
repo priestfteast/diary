@@ -86,4 +86,9 @@ public class ActivityServiceImpl implements ActivityService {
     public void deleteById(Long idToDelete) {
         activityRepository.deleteById(idToDelete);
     }
+
+    @Override
+    public Activity findByDescription(String description) {
+        return activityRepository.findByDescription(description);
+    }
 }

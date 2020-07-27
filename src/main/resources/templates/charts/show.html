@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Charts</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="container col-md-6 offset-3">
+        <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/charts/search/period'}">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="form-group">
+                            <h5 class="card-title">Start date</h5>
+                            <input name="startdate" type="date"  required="required" th:value="${start}"
+                                   pattern="{1,20}" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 ">
+                    <div class="card">
+                        <div class="form-group">
+                            <h5 class="card-title">End date</h5>
+                            <input name="enddate" type="date" required="required" th:value="${end}"
+                                   pattern="{1,20}" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="card border-0" >
+                        <h5 class="card-title"> </h5>
+                        <h5 class="card-title"> </h5>
+                        <h5 class="card-title"> </h5>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/charts/search/week'}">
+                    <input type="submit" class="btn btn-primary" name="week" value="Week">
+                </form>
+            </div>
+
+            <div class="col-md-3">
+                <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/charts/search/month'}">
+                    <input type="submit" class="btn btn-secondary" name="month" value="Month">
+                </form>
+            </div>
+
+            <div class="col-md-3">
+                <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/charts/search/quarter'}">
+                    <input type="submit" class="btn btn-success" name="quarter" value="Quarter">
+                </form>
+            </div>
+
+            <div class="col-md-3">
+                <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/charts/search/year'}">
+                    <input type="submit" class="btn btn-info" name="year" value="Year">
+                </form>
+            </div>
+        </div>
+
+        <br>
+        <div class="row col-md-8 offset-2" th:if="${#lists.isEmpty(entries)}">
+            <div class="table-responsive">
+                <p th:text="${'No data found for chosen period'}"></p>
+            </div>
+        </div>
+
+<br>
+        <div class="row">
+            <div class="col-md-6">
+        <canvas id="total_chart">
+        </canvas>
+        <script type="text/javascript" th:inline="javascript">
+                new Chart(document.getElementById("total_chart"), {
+                    type: 'bar',
+                    data: {
+                        labels: /*[[ ${types} ]]*/,
+                        datasets: [
+                            {
+                                label: "Количество минут",
+                                backgroundColor: ["#3cba9f", "#0275d8", "rgb(255, 0, 0)"],
+                                data: /*[[ ${total} ]]*/,
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    userCallback: function (v) {
+                                        return toHHMMSS(v).substring(0, toHHMMSS(v).indexOf(':')) + ' hours'
+                                    },
+                                    beginAtZero: true,
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return toHHMMSS(tooltipItem.yLabel)
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: "Total time spent between ".concat(/*[[ ${start} ]]*/).concat(" & ".concat(/*[[ ${end} ]]*/))
+                        }
+                    }
+                });
+
+                function toHHMMSS(minutes) {
+
+                    var hours = Math.floor(minutes / 60);
+                    var minutes = Math.floor((minutes - (hours * 60)) );
+                    var seconds = 0;
+
+                    if (hours < 10) {
+                        hours = "0" + hours;
+                    }
+                    if (minutes < 10) {
+                        minutes = "0" + minutes;
+                    }
+                    if (seconds < 10) {
+                        seconds = "0" + seconds;
+                    }
+                    return hours + ':' + minutes ;
+                }
+
+        </script>
+
+
+
+    </div>
+
+            <div class="col-md-6">
+                <h5 style="color: #0275d8" th:text="'Days left: '+${daysleft}">days left</h5>
+                <h6 style="color: forestgreen" th:text="'Job activity = '+ ${total[1]*100/(businessdays*standart[0])}+'% ('+${total[1]/60}+':'+ ${total[1]%60}+
+                ' h. from '+${businessdays*standart[0]/60}+' h.)  '+ ${(businessdays*standart[0]-total[1])/60}+' h. left!'">text</h6>
+                <h6 style="color: darkblue" th:text="'Upgrowth activity = '+ ${total[2]*100/(businessdays*standart[1])}+'% ('+${total[2]/60}+':'+ ${total[2]%60}+
+                ' h. from '+${businessdays*standart[1]/60}+' h.)  '+ ${(businessdays*standart[1]-total[2])/60}+' h. left!'">text</h6>
+            </div>
+
+        </div>
+
+    </div>
+<br>
+    <div class="container col-md-10 offset-1">
+            <div class="row">
+        <div class="col-md-4">
+            <canvas id="leisure_chart">
+            </canvas>
+            <script type="text/javascript" th:inline="javascript">
+                new Chart(document.getElementById("leisure_chart"), {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: /*[[ ${leisureactivities} ]]*/,
+                        datasets: [
+                            {
+                                label: "Количество минут",
+                                backgroundColor: ["rgb(100, 20, 50)","rgb(255, 10, 80)","rgb(255, 100, 0)","#3cba9f", "#0275d8", "rgb(255, 0, 0)"],
+                                data: /*[[ ${leisuretime} ]]*/,
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return toHHMMSS(tooltipItem.xLabel)
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: "Total time spent for leisure"
+                        }
+                    }
+                });
+            </script>
+
+
+
+        </div>
+
+
+
+            <div class="col-md-4">
+                <canvas id="job_chart">
+                </canvas>
+                <script type="text/javascript" th:inline="javascript">
+                    new Chart(document.getElementById("job_chart"), {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: /*[[ ${jobactivities} ]]*/,
+                            datasets: [
+                                {
+                                    label: "Количество минут",
+                                    backgroundColor: ["rgb(100, 20, 50)","rgb(255, 10, 80)","rgb(255, 100, 0)","#3cba9f", "#0275d8", "rgb(255, 0, 0)"],
+                                    data: /*[[ ${jobtime} ]]*/,
+                                }
+                            ]
+                        },
+                        options: {
+                            legend: { display: false },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function (tooltipItem) {
+                                        return toHHMMSS(tooltipItem.xLabel)
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: "Total time spent for work"
+                            }
+                        }
+                    });
+                </script>
+
+
+
+            </div>
+
+
+
+            <div class="col-md-4">
+                <canvas id="upgrowth_chart">
+                </canvas>
+                <script type="text/javascript" th:inline="javascript">
+                    new Chart(document.getElementById("upgrowth_chart"), {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: /*[[ ${upgrowthactivities} ]]*/,
+                            datasets: [
+                                {
+                                    label: "Количество минут",
+                                    backgroundColor: ["rgb(100, 20, 50)","rgb(255, 10, 80)","rgb(255, 100, 0)","#3cba9f", "#0275d8", "rgb(255, 0, 0)"],
+                                    data: /*[[ ${upgrowthtime} ]]*/,
+                                }
+                            ]
+                        },
+                        options: {
+                            legend: { display: false },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function (tooltipItem) {
+                                        return toHHMMSS(tooltipItem.xLabel)
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: "Total time spent for upgrowth"
+                            }
+                        }
+                    });
+                </script>
+
+
+
+            </div>
+
+
+    </div>
+</div>
+</div>
+</body>
+</html>

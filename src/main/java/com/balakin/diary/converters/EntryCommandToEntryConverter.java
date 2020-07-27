@@ -22,6 +22,7 @@ public class EntryCommandToEntryConverter implements Converter<EntryCommand, Ent
         entry.setDate(entryCommand.getDate());
         entry.setDuration(entryCommand.getDuration());
 
+
         return entry;
     }
 }
