@@ -30,7 +30,7 @@ public class ChartsController {
         this.chartsService = chartsService;
     }
 
-    @GetMapping("/charts/show/today")
+    @GetMapping({"/charts/show/today","/index","/"})
     public String showCharts( Model model){
 
 
